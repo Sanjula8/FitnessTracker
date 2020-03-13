@@ -1,24 +1,29 @@
 const express = require("express");
-const logger = require("morgan");
+const morgan = require("morgan");
 const mongoose = require("mongoose");
 
+const app = express();
 const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
 
-const app = express();
+app.use(morgan("dev"));
 
-app.use(logger("dev"));
-
+// Express Apps
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use(express.static("public"));
 
+// DB Mongoose
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populatedb", {
 	useNewUrlParser: true
 });
 
+// Adding Routes
+require("./routes/api")(app);
+require("./routes/view")(app);
+
+// Listener
 app.listen(PORT, () => {
 	console.log(`App running on port ${PORT}!`);
 });
