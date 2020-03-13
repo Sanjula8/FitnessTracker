@@ -12,6 +12,21 @@ module.exports -
 				});
 		});
 
-		app.post();
-		app.put();
+		app.post("/api/worouts", function(req, res) {
+			Workout.create({})
+				.then(data => res.json(data))
+				.catch(err => {
+					console.log(err);
+					res.json(err);
+				});
+		});
+
+		app.put("api/workouts/:id", ({ body, params }, res) => {
+			Workout.findByIDAndUpdate(params.id, { $push: { exercises: body } })
+				.then(data => res.json(data))
+				.catch(err => {
+					console.log(err);
+					res.json(err);
+				});
+		});
 	};
