@@ -19,10 +19,14 @@ module.exports -
 					console.log(err);
 					res.json(err);
 				});
-		});
 
-		app.put("api/workouts/:id", ({ body, params }, res) => {
-			Workout.findByIDAndUpdate(params.id, { $push: { exercises: body } })
+			app.put("api/workouts/:id", ({ body, params }, res) => {
+				Workout.findByIDAndUpdate(
+					params.id,
+					{ $push: { exercises: body } },
+					{ new: true, runValidators: true }
+				);
+			})
 				.then(data => res.json(data))
 				.catch(err => {
 					console.log(err);
